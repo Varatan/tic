@@ -1,10 +1,10 @@
-playerMap = {
-    "PLAYER_X": 1,
-    "PLAYER_O": 4
-}
+from enum import Enum
 
-boardStateMap = {
-    'PENDING': 0,
-    'DRAW': 1,
-    'WIN': 2
-}
+class player(Enum):
+    PLAYER_X = 1
+    PLAYER_O = 4
+
+class boardState(Enum):
+    PENDING = 0
+    DRAW = 1
+    WIN = 2
