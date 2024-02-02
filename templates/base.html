@@ -17,9 +17,6 @@
 
       td {
         border: 5px solid white;
-        width: 150px;
-        height: 150px;
-        font-size: 30px;
         text-align: center;
       }
     </style>
@@ -42,47 +39,46 @@
     <div class="h-100 d-flex align-items-center justify-content-center">
       <h1>Tura gracza: {{ turn }}</h1>
     </div>
-
     <div class="h-100 d-flex align-items-center justify-content-center">
-      <div class="table-responsive">
-        <table class="table table-light bg-light text-center">
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-        </table>
-
-        <table class="table table-dark bg-dark text-center">
-          {% for i in range(3) %}
-          <tr>
-            {% for j in range(3) %}
-            <td class="p-5">
-              {% if game[i][j] == 1 or game[i][j][] == 4 %} {% if game[i][j] ==
-              1 %} X {% endif %} {% if game[i][j] == 4 %} O {% endif %} {% else
-              %}
-              <a href="{{url_for ('make_turn', row=i, col=j, turn=turn)}}"
-                ><button type="button" class="btn btn-warning">
-                  {{turn}}
-                </button></a
-              >
-              {% endif %}
-            </td>
-            {% endfor %}
-          </tr>
+      <table class="table table-light bg-light w-25">
+        {% for i in range(3) %}
+        <tr>
+          {% for j in range(3) %}
+          <td>
+            {% set matrixId = game[i][j].getId() %}
+            ticc matrix: {{matrixId}}
+            <div class="d-flex align-items-center justify-content-center">
+              {%set activeTable = game[i][j].getActive()%}
+              {%if activeTable == True%}
+              {%set background = 'table-success'%}
+              {%set button = 'btn-success'%}
+              {%set disabled = '' %}
+              {%else%}
+              {%set background = 'table-dark' %}
+              {%set button = 'btn-dark' %}
+              {%set disabled = 'disabled' %}
+              {%endif%}
+              <table class="table {{background}} text-center m-1 w-100">
+                {% for row in game[i][j].getMatrix()%}
+                <tr>
+                  {%for column in game[i][j].getMatrix()%}
+                  <!-- <td> <a href="{{url_for ('make_turn', row=i, col=j, turn=turn)}}" -->
+                  <td>
+                    {% set turnPayload = {"row":i, "col":j, "turn":turn, "mId":matrixId} %}
+                    <a href="{{url_for ('make_turn', x=turnPayload.row, y=turnPayload.col, trn=turnPayload.turn, matId=turnPayload.mId)}}">
+                      <button type="button" class="btn {{button}}" {{disabled}}>{{turn}}</button>
+                    </a>
+                  </td>
+                  {%endfor%}
+                </tr>
+                {% endfor %}
+              </table>
+            </div>
+          </td>
           {% endfor %}
-        </table>
-      </div>
+        </tr>
+        {% endfor %}
+      </table>
     </div>
   </body>
 </html>

@@ -29,29 +29,34 @@ def index():
         # session['boardstate'] = uttc.getBoardState()
         session['turn'] = 'X'
         session['winner'] = ''
+        session['board'][1][1].setActive(True)
     print(session['tictactoe'])
     return render_template('base.html', game=session['board'],turn=session['turn'], winner=session['winner'])
 
-@app.route("/make_turn/<int:row>/<int:col>/<string:turn>")
-def make_turn(row, col, turn, tableid):
-    print(row,col,turn)
-    if(turn == 'X'):
-        session[f'tictactoe{tableid}'].setInput(row, col, True)
-        print
+@app.route("/make_turn/")
+def make_turn():
+    payloadMap ={
+        "row": request.args.get('x'),
+        "col": request.args.get('y'),
+        "turn": request.args.get('trn'),
+        "matId": request.args.get('matId')
+    }
+    if(payloadMap['turn'] == 'X'):
+        session['board'][int(payloadMap['matId'][0])][int(payloadMap['matId'][1])].setInput(int(payloadMap['row']), int(payloadMap['col']), True)
         session['turn'] = 'O'
     else:
-        session['tictactoe'].setInput(row, col, False)
+        session['board'][int(payloadMap['matId'][0])][int(payloadMap['matId'][1])].setInput(int(payloadMap['row']), int(payloadMap['col']), False)
         session['turn'] = 'X'
 
-    if (session['tictactoe'].checkWin() == boardState.WIN.value):
-        print('wchodzisz tu?')
-        print('boardState', session['tictactoe'].getBoardState())
-        return redirect(url_for('winner'))
+    # if (session['tictactoe'].checkWin() == boardState.WIN.value):
+    #     print('wchodzisz tu?')
+    #     print('boardState', session['tictactoe'].getBoardState())
+    #     return redirect(url_for('winner'))
     
-    if(session['tictactoe'].checkIfFull() == boardState.DRAW.value):
-        print('wchodzisz tu?')
-        print('boardState', session['tictactoe'].getBoardState())
-        return redirect(url_for('winner'))
+    # if(session['tictactoe'].checkIfFull() == boardState.DRAW.value):
+    #     print('wchodzisz tu?')
+    #     print('boardState', session['tictactoe'].getBoardState())
+    #     return redirect(url_for('winner'))
     return redirect(url_for('index'))
     
     

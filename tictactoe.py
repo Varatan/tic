@@ -1,7 +1,8 @@
 from utils import player, boardState
 
-class TicTacToeMatrix:
-    def __init__(self):
+class TicTacToeMatrix():
+    def __init__(self, id):
+        self.__id = id
         self.__matrix = [
             [0, 0, 0], 
             [0, 0, 0], 
@@ -9,6 +10,7 @@ class TicTacToeMatrix:
             ]
         self.__boardState = boardState.PENDING.value
         self.__winner = ''
+        self.__active = False
     def setInput(self, xval, yval, isX):  # Added self parameter
         if isX:
             self.__matrix[xval][yval] = player.PLAYER_X.value #X
@@ -28,6 +30,14 @@ class TicTacToeMatrix:
     def setWinner(self, winner):
         self.__winner = winner
 
+    def getActive(self):
+        return self.__active
+    def setActive(self, active):
+        self.__active = active
+
+    def getId(self):
+        return self.__id
+    
     # Check if three in a row, column or diagonal or if full 
     def checkIfThreeRow(self):
         # Check if three in a row 
@@ -95,15 +105,15 @@ class UltimateTicTacToe:
 
     def __init__(self):
         self.ttcMap = {
-            "00": TicTacToeMatrix(),
-            "01": TicTacToeMatrix(),
-            "02": TicTacToeMatrix(),
-            "10": TicTacToeMatrix(),
-            "11": TicTacToeMatrix(),
-            "12": TicTacToeMatrix(),
-            "20": TicTacToeMatrix(),
-            "21": TicTacToeMatrix(),
-            "22": TicTacToeMatrix()
+            "00": TicTacToeMatrix('00'),
+            "01": TicTacToeMatrix('01'),
+            "02": TicTacToeMatrix('02'),
+            "10": TicTacToeMatrix('10'),
+            "11": TicTacToeMatrix('11'),
+            "12": TicTacToeMatrix('12'),
+            "20": TicTacToeMatrix('20'),
+            "21": TicTacToeMatrix('21'),
+            "22": TicTacToeMatrix('22')
         }
         self.__matrix = [
             [self.ttcMap['00'], self.ttcMap['01'], self.ttcMap['02']],
@@ -120,4 +130,7 @@ class UltimateTicTacToe:
             self.__matrix[tableIdX][tableIdY].setInput(xval, yval, False)
     # Getters and setters
     def getMatrix(self):
-        return self.__matrix 
+        return self.__matrix
+    def modifyActiveState(self, matId, tableIdX, tableIdY):
+        self.__matrix[int(['matId'][0])][int(['matId'][1])].setActive(False)
+        self.__matrix[tableIdX][tableIdY].setActive(True)
