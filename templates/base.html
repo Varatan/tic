@@ -16,8 +16,12 @@
       }
 
       td {
-        border: 5px solid white;
+        border: 2px solid white;
         text-align: center;
+      }
+      a.disabled {
+        pointer-events: none;
+        cursor: default;
       }
     </style>
   </head>
@@ -40,39 +44,65 @@
       <h1>Tura gracza: {{ turn }}</h1>
     </div>
     <div class="h-100 d-flex align-items-center justify-content-center">
-      <table class="table table-light bg-light w-25">
+      <table class="table rounded-md table-light bg-light w-25">
         {% for i in range(3) %}
         <tr>
           {% for j in range(3) %}
           <td>
             {% set matrixId = game[i][j].getId() %}
-            ticc matrix: {{matrixId}}
             <div class="d-flex align-items-center justify-content-center">
-              {%set activeTable = game[i][j].getActive()%}
-              {%if activeTable == True%}
+              {%if game[i][j].getId() is in activeBoards %}
               {%set background = 'table-success'%}
               {%set button = 'btn-success'%}
               {%set disabled = '' %}
               {%else%}
-              {%set background = 'table-dark' %}
-              {%set button = 'btn-dark' %}
+              {%set background = 'table-secondary' %}
+              {%set button = 'btn-light' %}
               {%set disabled = 'disabled' %}
+
               {%endif%}
-              <table class="table {{background}} text-center m-1 w-100">
-                {% for row in game[i][j].getMatrix()%}
-                <tr>
-                  {%for column in game[i][j].getMatrix()%}
-                  <!-- <td> <a href="{{url_for ('make_turn', row=i, col=j, turn=turn)}}" -->
-                  <td>
-                    {% set turnPayload = {"row":i, "col":j, "turn":turn, "mId":matrixId} %}
-                    <a href="{{url_for ('make_turn', x=turnPayload.row, y=turnPayload.col, trn=turnPayload.turn, matId=turnPayload.mId)}}">
-                      <button type="button" class="btn {{button}}" {{disabled}}>{{turn}}</button>
-                    </a>
-                  </td>
-                  {%endfor%}
-                </tr>
-                {% endfor %}
-              </table>
+              {% if finishedBoards[game[i][j].getId()] == 1 %}
+              <div class="h-100  mt-4 mx-4 p-5 d-flex align-items-center justify-content-center">
+                <h1 class="text-danger display-1 w-100" style="font-size:412%">X</h1>
+              </div>
+              {% elif finishedBoards[game[i][j].getId()] == 4 %}
+              <div class="h-100 mt-4 mx-4 p-5 d-flex align-items-center justify-content-center">
+                <h1 class="text-primary display-1 w-100">O</h1>
+              </div>
+              {% elif finishedBoards[game[i][j].getId()] == 999 %}
+              <img class="img-fluid" src="https://i.kym-cdn.com/photos/images/newsfeed/002/336/945/e1c">
+              
+              {%else%}
+              <div class="h-100 w-100 mt-4 mx-4 d-flex align-items-center justify-content-center">
+                <table class="table {{background}} text-center m-1 w-100">
+                  {% for k in range(3)%}
+                  <tr>
+                    {%for l in range(3)%}
+                    <td>
+                      {% if game[i][j].getMatrix()[k][l] == 1 or game[i][j].getMatrix()[k][l] == 4 %}
+                      {% if game[i][j].getMatrix()[k][l] == 1 %}
+                      <div class="h-100 p-2 d-flex align-items-center justify-content-center text-danger">
+                        X
+                      </div>
+                      {% endif %}
+                      {% if game[i][j].getMatrix()[k][l] == 4 %}
+                      <div class="h-100 p-2 d-flex align-items-center justify-content-center text-primary">
+                        O
+                      </div>
+                      {% endif %}
+                      {%else%}
+                      {% set turnPayload = {"row":k, "col":l, "turn":turn, "mId":matrixId} %}
+                      <a class="{{disabled}}" href="{{url_for ('make_turn', x=turnPayload.row, y=turnPayload.col, trn=turnPayload.turn, matId=turnPayload.mId)}}">
+                        <button type="button" class="btn {{button}}" {{disabled}}>&nbsp;</button>
+                      </a>
+                      {%endif%}
+                    </td>
+                    {%endfor%}
+                  </tr>
+                  {% endfor %}
+                </table>
+              </div>
+              {%endif%}
             </div>
           </td>
           {% endfor %}
@@ -80,5 +110,11 @@
         {% endfor %}
       </table>
     </div>
+    <div class="h-100 d-flex align-items-center justify-content-center">
+      <form action="{{url_for ('index')}}" method="post">
+        <button type="submit" class="btn btn-success">Graj od nowa</button>
+      </form>
+    </div>
   </body>
 </html>
+</table>

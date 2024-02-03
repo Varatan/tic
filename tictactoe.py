@@ -8,9 +8,7 @@ class TicTacToeMatrix():
             [0, 0, 0], 
             [0, 0, 0]
             ]
-        self.__boardState = boardState.PENDING.value
         self.__winner = ''
-        self.__active = False
     def setInput(self, xval, yval, isX):  # Added self parameter
         if isX:
             self.__matrix[xval][yval] = player.PLAYER_X.value #X
@@ -19,21 +17,10 @@ class TicTacToeMatrix():
     # Getters and setters
     def getMatrix(self):
         return self.__matrix
-    
-    def getBoardState(self):
-        return self.__boardState
-    def setBoardState(self, boardState):
-        self.__boardState = boardState
-        
     def getWinner(self):
         return self.__winner
     def setWinner(self, winner):
         self.__winner = winner
-
-    def getActive(self):
-        return self.__active
-    def setActive(self, active):
-        self.__active = active
 
     def getId(self):
         return self.__id
@@ -74,10 +61,8 @@ class TicTacToeMatrix():
         for i in range(3):
             for j in range(3):
                 if self.__matrix[i][j] == 0:
-                   self.setBoardState(boardState.PENDING.value)
                    return
-        self.setBoardState(boardState.DRAW.value)
-        return self.getBoardState()
+        return boardState.DRAW.value
     # 🤨🤨🤨🤨🤨🤨
     # Check if win or draw
     def checkWin(self):
@@ -85,21 +70,18 @@ class TicTacToeMatrix():
         print('1', res)
         if res == player.PLAYER_X.value or res == player.PLAYER_O.value:
             self.setWinner(res)
-            self.setBoardState(boardState.WIN.value)
-            return self.getBoardState()
+            return boardState.WIN.value
         res = self.checkIfThreeCol()
         print('2', res)
         if res == player.PLAYER_X.value or res == player.PLAYER_O.value:
             self.setWinner(res)
-            self.setBoardState(boardState.WIN.value)
-            return self.getBoardState()
+            return boardState.WIN.value
         res = self.checkIfThreeDiag()
         print('3', res)
         if res == player.PLAYER_X.value or res == player.PLAYER_O.value:
             self.setWinner(res)
-            self.setBoardState(boardState.WIN.value)
-            return self.getBoardState()
-        return self.getBoardState()
+            return boardState.WIN.value
+        return boardState.PENDING.value
     
 class UltimateTicTacToe:
 
@@ -131,6 +113,3 @@ class UltimateTicTacToe:
     # Getters and setters
     def getMatrix(self):
         return self.__matrix
-    def modifyActiveState(self, matId, tableIdX, tableIdY):
-        self.__matrix[int(['matId'][0])][int(['matId'][1])].setActive(False)
-        self.__matrix[tableIdX][tableIdY].setActive(True)
