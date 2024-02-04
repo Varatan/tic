@@ -47,7 +47,7 @@ def make_turn():
     else:
         session['board'][int(payloadMap['matId'][0])][int(payloadMap['matId'][1])].setInput(int(payloadMap['row']), int(payloadMap['col']), False)
         session['turn'] = 'X'
-    
+    finished = False
 
     if session['board'][int(payloadMap['matId'][0])][int(payloadMap['matId'][1])].checkWin() == boardState.WIN.value:
         finishedBoards = session['finishedBoards']
@@ -59,8 +59,9 @@ def make_turn():
         allActive = session['allActive']
         allActive.remove(payloadMap['matId'])
         session['allActive'] = allActive
+        finished = True
     
-    if session['board'][int(payloadMap['matId'][0])][int(payloadMap['matId'][1])].checkIfFull() == boardState.DRAW.value:
+    if session['board'][int(payloadMap['matId'][0])][int(payloadMap['matId'][1])].checkIfFull() == boardState.DRAW.value and finished == False:
         finishedBoards = session['finishedBoards']
         finishedBoards[payloadMap['matId']] = 999
         session['finishedBoards'] = finishedBoards
@@ -96,3 +97,6 @@ def make_turn():
 @app.route("/winner/<int:result>/<int:winner>")
 def winner(result, winner ):
     return render_template('winner.html', winner = winner, result = result)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=12128, debug=True)

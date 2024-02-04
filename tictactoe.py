@@ -63,7 +63,7 @@ class TicTacToeMatrix():
                 if self.__matrix[i][j] == 0:
                    return
         return boardState.DRAW.value
-    # 🤨🤨🤨🤨🤨🤨
+    # 🤨🤨🤨🤨🤨🤨❤️❤️❤️❤️❤️❤️🤣🤣🤣🤣🤣🤣🤣🤣💕👌😘
     # Check if win or draw
     def checkWin(self):
         res = self.checkIfThreeRow()
